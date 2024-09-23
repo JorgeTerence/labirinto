@@ -5,14 +5,9 @@ RESET = "\033[0m"
 RED = "\x1b[31m"
 GREEN = "\x1b[32m"
 YELLOW = "\x1b[35m"
+MAGENTA = "\x1b[93m"
 
-colors = [GREEN, "", RESET]
-
-# black = "\x1b[30m"
-# blue = "\x1b[34m"
-# magenta = "\x1b[35m"
-# cyan = "\x1b[36m"
-# white = "\x1b[37m"
+colors = [GREEN, "", RED]
 
 
 def print_map(m):
@@ -23,10 +18,12 @@ def print_map(m):
 
 
 def print_track(m, track):
-    for row in m:
-        for pos in row:
-            if pos in track:
-                print(YELLOW + str(pos), RESET, end="")
+    for i, row in enumerate(m):
+        for j, pos in enumerate(row):
+            if pos == 2:
+                print(MAGENTA + "#", RESET, end="")
+            elif (j, i) in track:
+                print(RED + "@", RESET, end="")
             else:
                 print(colors[pos] + str(pos), RESET, end="")
         print("")
@@ -45,17 +42,16 @@ def navigate(
 ):
     track.append(cur)
     h, w = len(m), len(m[0])
-    if len(track) > 12:
-        print_track(m, track)
-        print("-" * len(m[0]) * 2)
+
     for p in directions(cur):
         if p == destiny:
-            print(track)
             track.append(p)
             return track
 
         if not p in track and bounded(p, m, h, w):
-            navigate(m, root, destiny, p, track.copy())
+            res = navigate(m, root, destiny, p, track.copy())
+            if res:
+                return res
 
     else:
         return 0
@@ -66,11 +62,20 @@ def bounded(p: Tuple[int, int], m: List[List[int]], h: int, w: int):
 
 
 if __name__ == "__main__":
-    with open("./maps/01.txt") as f:
+    with open("./maps/02.txt") as f:
         content = f.readlines()
         m = [[int(c) for c in list(line) if c != "\n"] for line in content]
 
         print_map(m)
 
-        res = navigate(m, (0, 1), (9, 7), (0, 1), [])
-        print(res)
+        print("-" * (2 * len(m[0]) - 1))
+
+        start, end = [
+            (x, y) for y, row in enumerate(m) for x, v in enumerate(row) if v == 2
+        ]
+
+        res = navigate(m, start, end, start, [])
+        if res == 0:
+            print("num deu :(")
+        else:
+            print_track(m, res)
