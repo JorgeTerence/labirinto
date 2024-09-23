@@ -1,11 +1,10 @@
 from typing import List, Tuple
-
+import sys
 
 RESET = "\033[0m"
 RED = "\x1b[31m"
 GREEN = "\x1b[32m"
-YELLOW = "\x1b[35m"
-MAGENTA = "\x1b[93m"
+YELLOW = "\x1b[93m"
 
 colors = [GREEN, "", RED]
 
@@ -21,7 +20,7 @@ def print_track(m, track):
     for i, row in enumerate(m):
         for j, pos in enumerate(row):
             if pos == 2:
-                print(MAGENTA + "#", RESET, end="")
+                print(YELLOW + "#", RESET, end="")
             elif (j, i) in track:
                 print(RED + "@", RESET, end="")
             else:
@@ -54,7 +53,7 @@ def navigate(
                 return res
 
     else:
-        return 0
+        return False
 
 
 def bounded(p: Tuple[int, int], m: List[List[int]], h: int, w: int):
@@ -62,7 +61,11 @@ def bounded(p: Tuple[int, int], m: List[List[int]], h: int, w: int):
 
 
 if __name__ == "__main__":
-    with open("./maps/02.txt") as f:
+    if len(sys.argv) < 2:
+        map_code = 1
+    else:
+        map_code = int(sys.argv[1])
+    with open(f"./maps/{map_code:02d}.txt") as f:
         content = f.readlines()
         m = [[int(c) for c in list(line) if c != "\n"] for line in content]
 
