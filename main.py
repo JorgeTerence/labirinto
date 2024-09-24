@@ -6,7 +6,7 @@ RED = "\x1b[31m"
 GREEN = "\x1b[32m"
 YELLOW = "\x1b[93m"
 
-colors = [GREEN, "", RED]
+colors = ["", GREEN, RED]
 
 
 def print_map(m):
@@ -20,9 +20,9 @@ def print_track(m, track):
     for i, row in enumerate(m):
         for j, pos in enumerate(row):
             if pos == 2:
-                print(YELLOW + "#", RESET, end="")
+                print(RED + "#", RESET, end="")
             elif (j, i) in track:
-                print(RED + "@", RESET, end="")
+                print(YELLOW + "@", RESET, end="")
             else:
                 print(colors[pos] + str(pos), RESET, end="")
         print("")
@@ -67,7 +67,7 @@ if __name__ == "__main__":
         map_code = int(sys.argv[1])
     with open(f"./maps/{map_code:02d}.txt") as f:
         content = f.readlines()
-        m = [[int(c) for c in list(line) if c != "\n"] for line in content]
+        m = [[int(c) for c in line if c != "\n"] for line in content]
 
         print_map(m)
 
