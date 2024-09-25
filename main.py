@@ -1,4 +1,3 @@
-from typing import List, Tuple
 import sys
 
 RESET = "\033[0m"
@@ -9,14 +8,14 @@ YELLOW = "\x1b[93m"
 colors = ["", GREEN, RED]
 
 
-def print_map(m):
+def print_map(m: list[list[int]]) -> None:
     for row in m:
         for pos in row:
             print(colors[pos] + str(pos), RESET, end="")
         print("")
 
 
-def print_track(m, track):
+def print_track(m: list[list[int]], track: list[tuple[int, int]]) -> None:
     for i, row in enumerate(m):
         for j, pos in enumerate(row):
             if pos == 2:
@@ -28,36 +27,36 @@ def print_track(m, track):
         print("")
 
 
-def directions(p):
+def directions(p: tuple[int, int]):
     return (p[0], p[1] - 1), (p[0], p[1] + 1), (p[0] - 1, p[1]), (p[0] + 1, p[1])
 
 
+def bounded(p: tuple[int, int], m: list[list[int]], h: int, w: int):
+    return 0 <= p[0] < w and 0 <= p[1] < h and m[p[1]][p[0]] == 0
+
+
 def navigate(
-    m: List[List[int]],
-    root: Tuple[int, int],
-    destiny: Tuple[int, int],
-    cur: Tuple[int, int],
-    track: List,
+    m: list[list[int]],
+    root: tuple[int, int],
+    destiny: tuple[int, int],
+    cur: tuple[int, int],
+    track: list,
 ):
     track.append(cur)
     h, w = len(m), len(m[0])
 
     for p in directions(cur):
-        if p == destiny:
-            track.append(p)
-            return track
-
         if not p in track and bounded(p, m, h, w):
             res = navigate(m, root, destiny, p, track.copy())
             if res:
                 return res
 
+        if p == destiny:
+            track.append(p)
+            return track
+
     else:
         return False
-
-
-def bounded(p: Tuple[int, int], m: List[List[int]], h: int, w: int):
-    return 0 <= p[0] < w and 0 <= p[1] < h and m[p[1]][p[0]] == 0
 
 
 if __name__ == "__main__":
