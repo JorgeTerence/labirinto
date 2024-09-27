@@ -68,8 +68,7 @@ def navigate(
 
     for p in directions(cur):
         if not p in path and bounded(p, m, h, w):
-            res = navigate(m, root, destiny, p, path.copy())
-            if res:
+            if res := navigate(m, root, destiny, p, path.copy()):
                 return res
 
         if p == destiny:
