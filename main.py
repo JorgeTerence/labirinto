@@ -11,6 +11,7 @@ colors = ["", GREEN, RED]
 
 @dataclass
 class Point:
+    """x y coordinate"""
     x: int
     y: int
 
@@ -19,6 +20,9 @@ class Point:
 
     def __repr__(self) -> str:
         return f"[{self.x},{self.y}]"
+    
+    def is_neighbor(self, other) -> bool:
+        return abs(self.x - other.x) + abs(self.y - other.y) == 1
 
 
 def print_map(m: list[list[int]]) -> None:
