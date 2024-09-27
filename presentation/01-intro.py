@@ -49,7 +49,7 @@ def get_graph():
 
 class Intro(Scene):
     def construct(self):
-        title = Text("What is a graph?", font="Consolas").scale(1.5)
+        title = Text("O que é um grafo?", font="Consolas").scale(1.5)
         self.play(Write(title))
         self.wait(1)
         self.play(Unwrite(title))
@@ -60,6 +60,15 @@ class Intro(Scene):
 
         self.play(
             g[k].animate.move_to([v.x - 4.5, v.y - 4.5, 0]) for k, v in vertices.items()
+        )
+
+        self.wait(1)
+
+        self.play(
+            [
+                g[len(vertices) - 1].animate.set_color(RED),
+                g[len(vertices) - 2].animate.set_color(RED),
+            ]
         )
 
         self.wait(2)
