@@ -45,10 +45,9 @@ if __name__ == "__main__":
         ]
 
         volume = len([v for row in m for v in row if v == 0])
-        print(f"Volume: {volume}")
-
         path = navigate(m, start, end)
         delta = len(path)
-        print(f"∆: {delta}")
 
-        print(path)
+        print("Volume =", volume)
+        print("∆ =", delta)
+        print(str(path)[:56], "..." + "]")
