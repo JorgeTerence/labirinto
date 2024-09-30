@@ -1,27 +1,8 @@
 import itertools as it
-from dataclasses import dataclass
 
 from manim import *
 
-
-@dataclass
-class Point:
-    """x y coordinate"""
-
-    x: int
-    y: int
-
-    def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
-
-    def __repr__(self) -> str:
-        return f"[{self.x},{self.y}]"
-
-    def is_neighbor(self, other) -> bool:
-        return abs(self.x - other.x) + abs(self.y - other.y) == 1
-
-    def __hash__(self) -> int:
-        return hash((self.x, self.y))
+from main import navigate
 
 
 def get_graph():
@@ -50,18 +31,17 @@ def get_graph():
 class Intro(Scene):
     def construct(self):
         title = Text("O que é um grafo?", font="Consolas").scale(1.5)
-        
+
         edges, vertices, matrix = get_graph()
         g = Graph(vertices.keys(), edges)
 
         m = Matrix(matrix)
         m.scale(0.75)
-        
+
         # Intro title
         self.play(Write(title))
         self.wait(5)
         self.play(Unwrite(title))
-
 
         self.play(Write(m))
         self.wait(10)
@@ -82,6 +62,14 @@ class Intro(Scene):
             ]
         )
 
-        
-
         self.wait(2)
+
+        # Draw path
+        path = navigate(matrix, vertices[len(vertices) - 2], vertices[len(vertices) - 1])
+
+        for i in range(len(path) - 1):
+            self.play(
+                g[vertices.index(path[i])].animate.set_color(YELLOW),
+                g[vertices.index(path[i + 1])].animate.set_color(YELLOW),
+            )
+            self.wait(0.5)

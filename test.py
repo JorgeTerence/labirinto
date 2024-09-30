@@ -19,3 +19,24 @@ if __name__ == "__main__":
     assert track1 == [P(i, 1) for i in range(9)], "Track should be complete"
 
     print("track1 passou nos testes")
+
+    m2 = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 0, 0, 0, 1, 0, 0, 1],
+        [1, 0, 0, 1, 0, 1, 1, 0, 1],
+        [1, 0, 0, 1, 0, 0, 0, 0, 1],
+        [1, 0, 1, 1, 1, 1, 1, 0, 1],
+        [2, 0, 0, 0, 0, 0, 0, 0, 2],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ]
+
+    track2 = navigate(m2, P(0, 5), P(8, 5))
+    print_track(m2, track2)
+
+    assert track2 != False, "There should be a path"
+    assert (track2[0], track2[-1]) == (
+        P(0, 5),
+        P(8, 5),
+    ), "Start and destiny should be at [0,5] and [8,5]"
+
+    print("track2 passou nos testes")
