@@ -44,31 +44,44 @@ def get_graph():
             if a[1].is_neighbor(b[1]) == 1
         ]
 
-        return edges, indexed_vertices
+        return edges, indexed_vertices, m
 
 
 class Intro(Scene):
     def construct(self):
         title = Text("O que é um grafo?", font="Consolas").scale(1.5)
+        
+        edges, vertices, matrix = get_graph()
+        g = Graph(vertices.keys(), edges)
+
+        m = Matrix(matrix)
+        m.scale(0.75)
+        
+        # Intro title
         self.play(Write(title))
-        self.wait(1)
+        self.wait(5)
         self.play(Unwrite(title))
 
-        edges, vertices = get_graph()
-        g = Graph(vertices.keys(), edges)
-        self.play(Create(g))
 
+        self.play(Write(m))
+        self.wait(10)
+        self.play(Unwrite(m))
+
+        # Draw dots
+        self.play(Create(g))
         self.play(
             g[k].animate.move_to([v.x - 4.5, v.y - 4.5, 0]) for k, v in vertices.items()
         )
-
         self.wait(1)
 
+        # Highlight start and end
         self.play(
             [
                 g[len(vertices) - 1].animate.set_color(RED),
                 g[len(vertices) - 2].animate.set_color(RED),
             ]
         )
+
+        
 
         self.wait(2)
