@@ -106,7 +106,7 @@ if __name__ == "__main__":
 
         path = navigate(m, start, end)
 
-        if path == 0:
+        if not path:
             print("num deu :(")
         else:
             print_track(m, path)
