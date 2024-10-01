@@ -10,7 +10,6 @@ Este repositório é referente à atividade avaliativa N3 de Estruturas de Dados
 - [Jorge Terence](https://github.com/JorgeTerence)
 - [Rodrigo Zanetti](https://github.com/RodrigoZanetti175)
 - [Vinicius Crozato](https://github.com/ViniciusCrozato)
-- @ViniciusCrozato _teste_
 
 ## Interação com o programa
 
@@ -61,7 +60,7 @@ Podemos mudar nossa visão e encarar o mapa como um grafo, com os pontos `0` com
 
 ## Partes da solução
 
-### Função [`navigate`](https://github.com/JorgeTerence/labirinto/blob/main/main.py#L60)
+### Função [`navigate`](https://github.com/JorgeTerence/labirinto/blob/main/main.py#L64)
 
 #### Parâmetros
 
@@ -81,7 +80,7 @@ Se o sinal alcançar a chamada original, significa que todos os caminhos possív
 
 Um adendo: o resultado positivo da função não necessariamente é o caminho otimizado. Isso acontece pois a função de verificar arredores verifica na ordem "cima, baixo, direita, esquerda", portanto, por exemplo, se houver um solução saindo para cima da raiz e outra para baixo, mesmo que a solução seguindo para baixo seja um caminho menor, a de cima será a solução encontrada. Para resolver isso seria necessário verificar todas as soluções possíveis, e então determinar qual caminho é o menor.
 
-### Função [`bounded`](https://github.com/JorgeTerence/labirinto/blob/main/main.py#L56)
+### Função [`bounded`](https://github.com/JorgeTerence/labirinto/blob/main/main.py#L60)
 
 #### Parâmetros
 
@@ -99,7 +98,7 @@ As condições para que ele seja um ponto percorrível são que ele esteja dentr
 
 Dessa forma, é possível verificar se um ponto está apto a ser adicionado ao caminho da solução.
 
-### Função [`directions`](https://github.com/JorgeTerence/labirinto/blob/main/main.py#L56)
+### Função [`directions`](https://github.com/JorgeTerence/labirinto/blob/main/main.py#L51)
 
 #### Parâmetros
 
@@ -113,4 +112,32 @@ Para fazer isso, a função utiliza os valores das coordenadas x e y, subtraindo
 
 - `Point(p.x, p.y - 1):` Mover-se para cima.
 
+## Análise Big O
 
+A operação de maior peso no algoritmo é a garantia de que nenhuma célula anterior seja visitada novamente.
+
+```py
+if p not in track and ...:
+  ...
+```
+
+Isso, por si só, tem a complexidade _O(n)_ de uma busca linear. Contudo, esse passo é repetido a cada passo ao explorar o labirinto, com `n` aumentando a cada passo. Os passos de path podem ser visualizdos assim:
+
+```py
+[
+  [(1, 2)],
+  [(1, 2), (2, 2)],
+  [(1, 2), (2, 2), (3, 2)],
+  [(1, 2), (2, 2), (3, 2), (3, 3)],
+  [(1, 2), (2, 2), (3, 2), (3, 3), (3, 4)],
+  ...
+]
+```
+
+O tempo total é a soma do tempo de cada uma dessas buscas lineares, em que `n` aumenta progressivamente. Essa sequência é chamada de sequência dos números triangulares:
+
+$$
+T_n = \displaystyle\sum_{i=1}^n i \qquad \text{ou} \qquad T_n = \frac{n^2+n}{2}
+$$
+
+No pior do pior dos casos, todas as células fazem parte de um único caminho. Podemos pensar no valor de todas as células como o volume do labirinto; como se tentássemos medir a quantidade de água que cabe dentro do labirinto. Simplificando os termos da equação dos números triangulares, chegamos a uma complexidade de $O(n^2)$, com $n$ sendo o volume do labirinto.

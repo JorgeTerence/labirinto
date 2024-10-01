@@ -40,11 +40,11 @@ class Intro(Scene):
 
         # Intro title
         self.play(Write(title))
-        self.wait(5)
+        self.wait(3)
         self.play(Unwrite(title))
 
         self.play(Write(m))
-        self.wait(10)
+        self.wait(3)
         self.play(Unwrite(m))
 
         # Draw dots
@@ -62,7 +62,7 @@ class Intro(Scene):
             ]
         )
 
-        self.wait(2)
+        self.wait(1)
 
         # Draw path
         path = navigate(matrix, vertices[len(vertices) - 2], vertices[len(vertices) - 1])
@@ -73,3 +73,4 @@ class Intro(Scene):
                 g[vertices.index(path[i + 1])].animate.set_color(YELLOW),
             )
             self.wait(0.5)
+        
