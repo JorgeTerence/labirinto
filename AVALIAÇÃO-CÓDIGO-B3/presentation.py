@@ -2,7 +2,7 @@ import itertools as it
 
 from manim import *
 
-from main import navigate
+from main import navigate, print_map, Point
 
 
 def get_graph():
@@ -11,6 +11,7 @@ def get_graph():
         vertices = [
             Point(x, y) for y, row in enumerate(m) for x, v in enumerate(row) if v == 0
         ]
+
         start, end = [
             Point(x, y) for y, row in enumerate(m) for x, v in enumerate(row) if v == 2
         ]
@@ -30,21 +31,15 @@ def get_graph():
 
 class Intro(Scene):
     def construct(self):
-        title = Text("O que é um grafo?", font="Consolas").scale(1.5)
-
         edges, vertices, matrix = get_graph()
+        # matrix = [row[::-1] for row in matrix]
         g = Graph(vertices.keys(), edges)
 
         m = Matrix(matrix)
         m.scale(0.75)
 
-        # Intro title
-        self.play(Write(title))
-        self.wait(3)
-        self.play(Unwrite(title))
-
         self.play(Write(m))
-        self.wait(3)
+        self.wait(1)
         self.play(Unwrite(m))
 
         # Draw dots
@@ -62,15 +57,18 @@ class Intro(Scene):
             ]
         )
 
-        self.wait(1)
+        self.wait(0.5)
 
         # Draw path
-        path = navigate(matrix, vertices[len(vertices) - 2], vertices[len(vertices) - 1])
+        path = navigate(
+            matrix, vertices[len(vertices) - 2], vertices[len(vertices) - 1]
+        )
 
-        for i in range(len(path) - 1):
-            self.play(
-                g[vertices.index(path[i])].animate.set_color(YELLOW),
-                g[vertices.index(path[i + 1])].animate.set_color(YELLOW),
-            )
-            self.wait(0.5)
-        
+        vertices_values = list(vertices.values())
+
+        self.play(
+            g[vertices_values.index(path[i])].animate.set_color(RED)
+            for i in range(len(path) - 1)
+        )
+
+        self.wait(1.5)
